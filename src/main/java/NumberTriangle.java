@@ -1,4 +1,5 @@
 import java.io.*;
+import java.util.ArrayList;
 
 /**
  * This is the provided NumberTriangle class to be used in this coding task.
@@ -111,21 +112,40 @@ public class NumberTriangle {
 
 
         // TODO define any variables that you want to use to store things
+        ArrayList<NumberTriangle> prev = new ArrayList<NumberTriangle>();
+        ArrayList<NumberTriangle> current = new ArrayList<NumberTriangle>();
 
         // will need to return the top of the NumberTriangle,
         // so might want a variable for that.
         NumberTriangle top = null;
 
         String line = br.readLine();
+        String[] separated = line.split(" ");
+        for (String s:separated) {
+            current.add(new NumberTriangle(Integer.parseInt(s)));
+        }
+        top = current.get(0);
         while (line != null) {
-
+            if(prev.isEmpty())
+                continue;
             // remove when done; this line is included so running starter code prints the contents of the file
             System.out.println(line);
 
-            // TODO process the line
-
+            int i = 0;
+            while (i < prev.size()) {
+                prev.get(i).setLeft(current.get(i));
+                prev.get(i).setRight(current.get(i));
+                i++;
+            }
             //read the next line
+            prev = current;
             line = br.readLine();
+            current.clear();
+            separated = line.split(" ");
+            for (String s:separated) {
+                current.add(new NumberTriangle(Integer.parseInt(s)));
+            }
+
         }
         br.close();
         return top;
@@ -138,7 +158,7 @@ public class NumberTriangle {
         // [not for credit]
         // you can implement NumberTriangle's maxPathSum method if you want to try to solve
         // Problem 18 from project Euler [not for credit]
-        mt.maxSumPath();
+        //mt.maxSumPath();
         System.out.println(mt.getRoot());
     }
 }
