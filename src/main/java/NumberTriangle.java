@@ -89,8 +89,16 @@ public class NumberTriangle {
      *
      */
     public int retrieve(String path) {
-        // TODO implement this method
-        return -1;
+        if(path.isEmpty()){
+                return root;
+            }
+
+        if (path.charAt(0) == 'l') {
+            return this.left.retrieve(path.substring(1));
+        }
+        else{
+            return this.right.retrieve(path.substring(1));
+        }
     }
 
     /** Read in the NumberTriangle structure from a file.
@@ -105,51 +113,44 @@ public class NumberTriangle {
      * @throws IOException may naturally occur if an issue reading the file occurs
      */
     public static NumberTriangle loadTriangle(String fname) throws IOException {
-        // open the file and get a BufferedReader object whose methods
-        // are more convenient to work with when reading the file contents.
         InputStream inputStream = NumberTriangle.class.getClassLoader().getResourceAsStream(fname);
         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
 
+        ArrayList<NumberTriangle> prev = new ArrayList<>();
+        ArrayList<NumberTriangle> current = new ArrayList<>();
 
-        // TODO define any variables that you want to use to store things
-        ArrayList<NumberTriangle> prev = new ArrayList<NumberTriangle>();
-        ArrayList<NumberTriangle> current = new ArrayList<NumberTriangle>();
-
-        // will need to return the top of the NumberTriangle,
-        // so might want a variable for that.
         NumberTriangle top = null;
 
         String line = br.readLine();
+
         String[] separated = line.split(" ");
-        for (String s:separated) {
+        for (String s : separated) {
             current.add(new NumberTriangle(Integer.parseInt(s)));
         }
         top = current.get(0);
+
+        line = br.readLine();
         while (line != null) {
-
-            // remove when done; this line is included so running starter code prints the contents of the file
-            System.out.println(line);
-
-            int i = 0;
-            while (i < prev.size()) {
-                prev.get(i).setLeft(current.get(i));
-                prev.get(i).setRight(current.get(i));
-                i++;
-            }
-            //read the next line
             prev = current;
-            line = br.readLine();
-            current.clear();
-            if (line != null) {
-                separated = line.split(" ");
-                for (String s : separated) {
-                    current.add(new NumberTriangle(Integer.parseInt(s)));
-                }
+            current = new ArrayList<>();
+
+            separated = line.split(" ");
+            for (String s : separated) {
+                current.add(new NumberTriangle(Integer.parseInt(s)));
             }
+
+            for (int i = 0; i < prev.size(); i++) {
+                prev.get(i).setLeft(current.get(i));
+                prev.get(i).setRight(current.get(i + 1));
+            }
+
+            line = br.readLine();
         }
+
         br.close();
         return top;
     }
+
 
     public static void main(String[] args) throws IOException {
 
