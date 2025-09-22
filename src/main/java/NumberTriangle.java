@@ -126,8 +126,7 @@ public class NumberTriangle {
         }
         top = current.get(0);
         while (line != null) {
-            if(prev.isEmpty())
-                continue;
+
             // remove when done; this line is included so running starter code prints the contents of the file
             System.out.println(line);
 
@@ -141,11 +140,12 @@ public class NumberTriangle {
             prev = current;
             line = br.readLine();
             current.clear();
-            separated = line.split(" ");
-            for (String s:separated) {
-                current.add(new NumberTriangle(Integer.parseInt(s)));
+            if (line != null) {
+                separated = line.split(" ");
+                for (String s : separated) {
+                    current.add(new NumberTriangle(Integer.parseInt(s)));
+                }
             }
-
         }
         br.close();
         return top;
